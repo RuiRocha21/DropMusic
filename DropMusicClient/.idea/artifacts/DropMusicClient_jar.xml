@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DropMusicClient:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DropMusicClient_jar</output-path>
+    <root id="archive" name="DropMusicClient.jar">
+      <element id="module-output" name="DropMusicClient" />
+    </root>
+  </artifact>
+</component>

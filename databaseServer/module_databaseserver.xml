@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_databaseserver" default="compile.module.databaseserver">
+  <dirname property="module.databaseserver.basedir" file="${ant.file.module_databaseserver}"/>
+  
+  <property name="module.jdk.home.databaseserver" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.databaseserver" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.databaseserver" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.databaseserver" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="databaseserver.output.dir" value="${module.databaseserver.basedir}/out/production/databaseServer"/>
+  <property name="databaseserver.testoutput.dir" value="${module.databaseserver.basedir}/out/test/databaseServer"/>
+  
+  <path id="databaseserver.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="databaseserver.module.production.classpath">
+    <path refid="${module.jdk.classpath.databaseserver}"/>
+    <path refid="library.mysql-connector-java-8.0.131.classpath"/>
+    <path refid="library.mysql-connector-java-8.0.13.classpath"/>
+  </path>
+  
+  <path id="databaseserver.runtime.production.module.classpath">
+    <pathelement location="${databaseserver.output.dir}"/>
+    <path refid="library.mysql-connector-java-8.0.131.classpath"/>
+    <path refid="library.mysql-connector-java-8.0.13.classpath"/>
+  </path>
+  
+  <path id="databaseserver.module.classpath">
+    <path refid="${module.jdk.classpath.databaseserver}"/>
+    <pathelement location="${databaseserver.output.dir}"/>
+    <path refid="library.mysql-connector-java-8.0.131.classpath"/>
+    <path refid="library.mysql-connector-java-8.0.13.classpath"/>
+  </path>
+  
+  <path id="databaseserver.runtime.module.classpath">
+    <pathelement location="${databaseserver.testoutput.dir}"/>
+    <pathelement location="${databaseserver.output.dir}"/>
+    <path refid="library.mysql-connector-java-8.0.131.classpath"/>
+    <path refid="library.mysql-connector-java-8.0.13.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.databaseserver">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.databaseserver">
+    <patternset refid="excluded.from.module.databaseserver"/>
+  </patternset>
+  
+  <path id="databaseserver.module.sourcepath">
+    <dirset dir="${module.databaseserver.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.databaseserver" depends="compile.module.databaseserver.production,compile.module.databaseserver.tests" description="Compile module databaseServer"/>
+  
+  <target name="compile.module.databaseserver.production" depends="register.custom.compilers" description="Compile module databaseServer; production classes">
+    <mkdir dir="${databaseserver.output.dir}"/>
+    <javac2 destdir="${databaseserver.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.databaseserver}/javac">
+      <compilerarg line="${compiler.args.databaseserver}"/>
+      <bootclasspath refid="databaseserver.module.bootclasspath"/>
+      <classpath refid="databaseserver.module.production.classpath"/>
+      <src refid="databaseserver.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.databaseserver"/>
+    </javac2>
+    
+    <copy todir="${databaseserver.output.dir}">
+      <fileset dir="${module.databaseserver.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.databaseserver.tests" depends="register.custom.compilers,compile.module.databaseserver.production" description="compile module databaseServer; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.databaseserver" description="cleanup module">
+    <delete dir="${databaseserver.output.dir}"/>
+    <delete dir="${databaseserver.testoutput.dir}"/>
+  </target>
+</project>
